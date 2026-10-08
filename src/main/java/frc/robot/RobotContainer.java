@@ -10,7 +10,6 @@ import frc.robot.Constants.DriveConstants.DriveType;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TeleopCommands;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.InputSubsystem;
@@ -18,6 +17,7 @@ import frc.robot.subsystems.InputSubsystem;
 import java.lang.reflect.Method;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -36,10 +36,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final InputSubsystem m_inputSubsystem = new InputSubsystem();
-  private final DriveType driveType = DriveType.SWERVE_DRIVE;
-  private final DriveSubsystem m_driveSubsystem = new DriveSubsystem(m_inputSubsystem, driveType);
+  private final DriveSubsystem m_driveSubsystem = new DriveSubsystem(m_inputSubsystem);
   //private final ArmSubsystem m_armSubsystem = new ArmSubsystem(m_inputSubsystem);
-  private final ArmSubsystem m_armSubsystem = null;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(
@@ -60,7 +58,7 @@ public class RobotContainer {
     if (teleopCommand == null) {
       teleopCommand = getTeleopCommand();
     }
-    teleopCommand.schedule();
+    CommandScheduler.getInstance().schedule(teleopCommand);
   }
 
   /**
@@ -135,7 +133,7 @@ public class RobotContainer {
         double turn = m_inputSubsystem.getTurn();
         System.out.print("fb: " + forwardBack + "\n\tlr:" + leftRight + "\n\t\tturn:" + turn);
 
-        m_driveSubsystem.drive(forwardBack, leftRight, turn);
+        //m_driveSubsystem.drive(forwardBack, leftRight, turn);
       }
     }, m_inputSubsystem, m_driveSubsystem);
     return result;
@@ -147,11 +145,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    if (m_armSubsystem != null) {
-      return Autos.coralAuto(m_driveSubsystem, m_armSubsystem, "right");
-    } else {
       return null;
-    }
   }
 }
