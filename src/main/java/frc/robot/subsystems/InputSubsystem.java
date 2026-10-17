@@ -126,7 +126,8 @@ public class InputSubsystem extends SubsystemBase {
                            MathUtil.applyDeadband(joystickLeftRight, Constants.OperatorConstants.JOYSTICK_DEAD_ZONE);
 
         leftRight = MathUtil.clamp(leftRight, -1.0, 1.0);
-
+        if (m_xspeedLimiter.calculate(leftRight) != 0)
+            System.out.println("lr: " + m_xspeedLimiter.calculate(leftRight));
         return m_xspeedLimiter.calculate(leftRight);
     }
 

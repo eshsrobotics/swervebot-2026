@@ -127,14 +127,11 @@ public class RobotContainer {
     Command result = new RunCommand(() -> {
       // This runnable runs continously, and as long as it's running the 
       // drive should respond to controller input.
-      while (true) {
         double forwardBack = m_inputSubsystem.getForwardBack();
         double leftRight = m_inputSubsystem.getLeftRight();
         double turn = m_inputSubsystem.getTurn();
-        System.out.print("fb: " + forwardBack + "\n\tlr:" + leftRight + "\n\t\tturn:" + turn);
-
         //m_driveSubsystem.drive(forwardBack, leftRight, turn);
-      }
+      
     }, m_inputSubsystem, m_driveSubsystem);
     return result;
   }
