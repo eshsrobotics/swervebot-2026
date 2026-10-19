@@ -181,22 +181,18 @@ public class DriveSubsystem extends SubsystemBase {
         // initialized them for the 2020bot.
         SparkMaxConfig commonConfig = new SparkMaxConfig();
         commonConfig.idleMode(IdleMode.kBrake);
-        
-        // Apply this config if we want a motor to be inverted
-        var invertedConfig = commonConfig.inverted(true);
-
+       
         // For the motors observed to be operating incorrectly (i.e,
         // going clockwise when instructed to go counterclockwise), this
         // loop will apply an inversion to them. The motors operating
         // correctly will not be changed. 
         for (int i = 0; i < 4; i++) {
-            var motor = swervePivotMotors.get(i);
             var config = new SparkMaxConfig();
             config.apply(commonConfig);
+            
             //TODO: This belongs in drive motor configuration for getting
             //the drive speed in meters per second.
             //config.encoder.velocityConversionFactor(getConversionFactor());
-            motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
         }
 
         // Initialize CANcoders
@@ -335,19 +331,10 @@ public class DriveSubsystem extends SubsystemBase {
             builder.addDoubleProperty("FR Goal Angle", () -> goalStates.get(WheelIndex.FRONT_RIGHT.label).angle.getDegrees(), null);
 
         builder.setActuator(true);
-        builder.setSafeState(this::disable);
+        builder.setSafeState(this::stopAllMotors);
     }
 
-    /**
-     * Calling this function removes the shuffleboard's ability to write values
-     * to the motors. This is called by our sendable interface so that the only
-     * time a shuffleboard live window can set motor speeds, is during test
-     * mode.
-     */
-    void disable() {
-        swerveDriveMotors.forEach(SparkMax::disable);
-        swervePivotMotors.forEach(SparkMax::disable);
-    }
+   
 
     /**
      * Drive the robot according to the given speeds.  This is meant to be used
@@ -406,7 +393,6 @@ public class DriveSubsystem extends SubsystemBase {
             //Uche suggested this but it did not work ):
             //CANCoderAnglesRadians[i] -= Math.toRadians(CAN_CODER_ANGLE_OFFSETS[i]);
         }
-
         // TODO: Use the CANCoder's measurements for the PID
         // controllers. 
         //

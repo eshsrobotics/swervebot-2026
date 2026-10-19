@@ -131,7 +131,8 @@ public class RobotContainer {
         double leftRight = m_inputSubsystem.getLeftRight();
         double turn = m_inputSubsystem.getTurn();
         //m_driveSubsystem.drive(forwardBack, leftRight, turn);
-      
+        System.out.println("Drive inputs: " + forwardBack + ", " + leftRight + ", " + turn); 
+        
     }, m_inputSubsystem, m_driveSubsystem);
     return result;
   }
